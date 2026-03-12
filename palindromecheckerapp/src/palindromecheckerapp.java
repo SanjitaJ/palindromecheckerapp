@@ -2,20 +2,14 @@ import java.util.Stack;
 import java.util.Deque;
 import java.util.ArrayDeque;
 
-// Strategy Interface
-interface PalindromeStrategy {
-    boolean checkPalindrome(String word);
-}
+public class palindromecheckerapp {
 
-// Stack-based strategy
-class StackStrategy implements PalindromeStrategy {
-
-    public boolean checkPalindrome(String word) {
-
+    // Stack-based palindrome check
+    public static boolean stackPalindrome(String word) {
         Stack<Character> stack = new Stack<>();
 
-        for (int i = 0; i < word.length(); i++) {
-            stack.push(word.charAt(i));
+        for (char c : word.toCharArray()) {
+            stack.push(c);
         }
 
         String reversed = "";
@@ -26,13 +20,9 @@ class StackStrategy implements PalindromeStrategy {
 
         return word.equals(reversed);
     }
-}
 
-// Deque-based strategy
-class DequeStrategy implements PalindromeStrategy {
-
-    public boolean checkPalindrome(String word) {
-
+    // Deque-based palindrome check
+    public static boolean dequePalindrome(String word) {
         Deque<Character> deque = new ArrayDeque<>();
 
         for (char c : word.toCharArray()) {
@@ -40,7 +30,6 @@ class DequeStrategy implements PalindromeStrategy {
         }
 
         while (deque.size() > 1) {
-
             if (deque.removeFirst() != deque.removeLast()) {
                 return false;
             }
@@ -48,25 +37,26 @@ class DequeStrategy implements PalindromeStrategy {
 
         return true;
     }
-}
-
-// Main application class
-public class palindromecheckerapp {
 
     public static void main(String[] args) {
 
-        String word = "madam";
+        String word = "madaminedenimadam";
 
-        // Choose strategy at runtime
-        PalindromeStrategy strategy = new StackStrategy();
-        // PalindromeStrategy strategy = new DequeStrategy();
+        // Measure Stack algorithm time
+        long startStack = System.nanoTime();
+        boolean stackResult = stackPalindrome(word);
+        long endStack = System.nanoTime();
 
-        boolean result = strategy.checkPalindrome(word);
+        // Measure Deque algorithm time
+        long startDeque = System.nanoTime();
+        boolean dequeResult = dequePalindrome(word);
+        long endDeque = System.nanoTime();
 
-        if (result) {
-            System.out.println(word + " is a Palindrome.");
-        } else {
-            System.out.println(word + " is NOT a Palindrome.");
-        }
+        // Display results
+        System.out.println("Stack Result: " + stackResult);
+        System.out.println("Stack Execution Time: " + (endStack - startStack) + " ns");
+
+        System.out.println("Deque Result: " + dequeResult);
+        System.out.println("Deque Execution Time: " + (endDeque - startDeque) + " ns");
     }
 }
